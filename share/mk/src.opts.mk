@@ -53,69 +53,45 @@ __<src.opts.mk>__:
 # At this time, there's no provision for mutually incompatible options.
 
 __DEFAULT_YES_OPTIONS = \
-    ACCT \
     ACPI \
-    APM \
     AT \
-    ATM \
     AUDIT \
     AUTHPF \
     AUTOFS \
     BHYVE \
-    BLACKLIST \
+    BHYVE_SNAPSHOT \
     BLUETOOTH \
     BOOT \
-    BOOTPARAMD \
-    BOOTPD \
     BSD_CPIO \
-    BSDINSTALL \
     BSNMP \
     BZIP2 \
-    CALENDAR \
     CAPSICUM \
     CAROOT \
     CASPER \
-    CCD \
     CDDL \
-    CLANG \
-    CLANG_BOOTSTRAP \
-    CLANG_IS_CC \
     CLEAN \
     CPP \
-    CROSS_COMPILER \
     CRYPT \
     CUSE \
     CXX \
     CXGBETOOL \
     DIALOG \
     DICT \
-    DMAGENT \
     DYNAMICROOT \
-    EE \
     EFI \
     ELFTOOLCHAIN_BOOTSTRAP \
-    EXAMPLES \
     FDT \
     FILE \
-    FINGER \
-    FLOPPY \
-    FORTH \
     FP_LIBC \
-    FREEBSD_UPDATE \
-    FTP \
-    GAMES \
     GH_BC \
     GNU_DIFF \
     GOOGLETEST \
     GPIO \
-    HAST \
-    HTML \
+    GSSAPI \
     HYPERV \
     ICONV \
     INET \
     INET6 \
-    INETD \
-    IPFILTER \
     IPFW \
     ISCSI \
     JAIL \
@@ -124,47 +100,31 @@ __DEFAULT_YES_OPTIONS = \
     LDNS \
     LDNS_UTILS \
     LEGACY_CONSOLE \
-    LLD \
-    LLD_BOOTSTRAP \
-    LLD_IS_LD \
-    LLVM_ASSERTIONS \
-    LLVM_COV \
-    LLVM_CXXFILT \
-    LLVM_TARGET_ALL \
     LOADER_GELI \
     LOADER_LUA \
     LOADER_OFW \
     LOADER_UBOOT \
     LOCALES \
     LOCATE \
-    LPR \
     LS_COLORS \
     LZMA_SUPPORT \
-    MAIL \
     MAILWRAPPER \
+    MALLOC_PRODUCTION \
     MAKE \
     MLX5TOOL \
-    NDIS \
     NETCAT \
     NETGRAPH \
     NLS_CATALOGS \
-    NS_CACHING \
-    NTP \
     NVME \
     OFED \
     OPENSSL \
     PAM \
     PF \
-    PKGBOOTSTRAP \
     PMC \
-    PORTSNAP \
     PPP \
     QUOTAS \
     RADIUS_SUPPORT \
-    RBOOTD \
-    RESCUE \
-    ROUTED \
-    SENDMAIL \
+    REPRODUCIBLE_BUILD \
     SERVICESDB \
     SETUID_LOGIN \
     SHARED_TOOLCHAIN \
@@ -172,17 +132,11 @@ __DEFAULT_YES_OPTIONS = \
     SOURCELESS \
     SOURCELESS_HOST \
     SOURCELESS_UCODE \
+    SORT_THREADS \
     STATS \
-    SYSCONS \
     SYSTEM_COMPILER \
     SYSTEM_LINKER \
-    TALK \
-    TCP_WRAPPERS \
     TCSH \
-    TELNET \
-    TEXTPROC \
-    TFTP \
-    UNBOUND \
     USB \
     UTMPX \
     VI \
@@ -194,23 +148,73 @@ __DEFAULT_YES_OPTIONS = \
     ZONEINFO
 
 __DEFAULT_NO_OPTIONS = \
+    ACCT \
+    APM \
+    ATM \
     BEARSSL \
-    BHYVE_SNAPSHOT \
+    BLACKLIST \
+    BOOTPARAMD \
+    BOOTPD \
+    BSDINSTALL \
+    CALENDAR \
+    CCD \
+    CLANG \
+    CLANG_BOOTSTRAP \
     CLANG_EXTRAS \
     CLANG_FORMAT \
+    CLANG_IS_CC \
+    CROSS_COMPILER \
+    DMAGENT \
     DTRACE_TESTS \
+    EE \
+    EXAMPLES \
     EXPERIMENTAL \
+    FINGER \
+    FLOPPY \
+    FORTH \
+    FREEBSD_UPDATE \
+    FTP \
+    GAMES \
+    HAST \
     HESIOD \
+    HTML \
+    INETD \
+    IPFILTER \
     LIBSOFT \
+    LLD \
+    LLD_BOOTSTRAP \
+    LLD_IS_LD \
+    LLDB \
+    LLVM_ASSERTIONS \
+    LLVM_COV \
+    LLVM_CXXFILT \
+    LLVM_TARGET_ALL \
     LOADER_FIREWIRE \
     LOADER_VERBOSE \
     LOADER_VERIEXEC_PASS_MANIFEST \
-    MALLOC_PRODUCTION \
+    LPR \
+    MAIL \
+    NDIS \
+    NS_CACHING \
+    NTP \
     OFED_EXTRA \
     OPENLDAP \
-    REPRODUCIBLE_BUILD \
+    OPENMP \
+    PKGBOOTSTRAP \
+    PORTSNAP \
+    RBOOTD \
+    RESCUE \
+    ROUTED \
     RPCBIND_WARMSTART_SUPPORT \
-    SORT_THREADS \
+    SENDMAIL \
+    SYSCONS \
+    TALK \
+    TCP_WRAPPERS \
+    TELNET \
+    TESTS \
+    TEXTPROC \
+    TFTP \
+    UNBOUND \
     ZONEINFO_LEAPSECONDS_SUPPORT \
 
 # LEFT/RIGHT. Left options which default to "yes" unless their corresponding
@@ -283,11 +287,6 @@ __DEFAULT_NO_OPTIONS+=LLVM_TARGET_BPF
 .if ${__T:Mriscv*} != ""
 BROKEN_OPTIONS+=OFED
 .endif
-.if ${__T} == "aarch64" || ${__T} == "amd64" || ${__T} == "i386"
-__DEFAULT_YES_OPTIONS+=LLDB
-.else
-__DEFAULT_NO_OPTIONS+=LLDB
-.endif
 # LIB32 is supported on amd64, mips64, and powerpc64
 .if (${__T} == "amd64" || ${__T:Mmips64*} || ${__T} == "powerpc64")
 __DEFAULT_YES_OPTIONS+=LIB32
@@ -352,13 +351,6 @@ BROKEN_OPTIONS+=HYPERV
 .if ${__T} != "aarch64" && ${__T} != "amd64" && ${__T} != "i386" && \
     ${__T:Mpowerpc64*} == ""
 BROKEN_OPTIONS+=NVME
-.endif
-
-.if ${__T} == "aarch64" || ${__T} == "amd64" || ${__T} == "i386" || \
-    ${__T:Mpowerpc64*} != "" || ${__T:Mriscv64*} != ""
-__DEFAULT_YES_OPTIONS+=OPENMP
-.else
-__DEFAULT_NO_OPTIONS+=OPENMP
 .endif
 
 .if ${.MAKE.OS} != "FreeBSD"

@@ -23,7 +23,6 @@ SUBDIR=	adduser \
 	dhcpcd \
 	diskinfo \
 	dumpcis \
-	etcupdate \
 	extattr \
 	extattrctl \
 	fifolog \
@@ -40,7 +39,6 @@ SUBDIR=	adduser \
 	mailwrapper \
 	makefs \
 	memcontrol \
-	mergemaster \
 	mfiutil \
 	mixer \
 	mlxcontrol \
@@ -48,7 +46,6 @@ SUBDIR=	adduser \
 	mpsutil \
 	mptutil \
 	mtest \
-	newsyslog \
 	nfscbd \
 	nfsd \
 	nfsdumpstate \
@@ -58,7 +55,6 @@ SUBDIR=	adduser \
 	nologin \
 	openntpd \
 	pciconf \
-	periodic \
 	pnfsdscopymr \
 	pnfsdsfile \
 	pnfsdskill \
@@ -80,8 +76,6 @@ SUBDIR=	adduser \
 	runsv \
 	runsvdir \
 	runsvchdir \
-	rwhod \
-	service \
 	services_mkdb \
 	sesutil \
 	setfib \
@@ -99,7 +93,6 @@ SUBDIR=	adduser \
 	tcpdump \
 	traceroute \
 	trim \
-	trpt \
 	tzsetup \
 	ugidfw \
 	valectl \

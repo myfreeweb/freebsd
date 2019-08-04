@@ -5,8 +5,7 @@
 
 /set type=dir uname=root gname=wheel mode=0755
 .
-    bin
-    ..
+    bin             type=link link=usr/bin
     boot
         defaults
         ..
@@ -35,11 +34,17 @@
         zfs
         ..
     ..
+    compat
+        linux
+            proc
+            ..
+            sys
+            ..
+        ..
+    ..
     dev             mode=0555
     ..
     etc
-        X11
-        ..
         authpf
         ..
         autofs
@@ -62,29 +67,15 @@
         ..
         mtree
         ..
-        newsyslog.conf.d
-        ..
-        ntp             mode=0700
-        ..
         pam.d
-        ..
-        periodic
-            daily
-            ..
-            monthly
-            ..
-            security
-            ..
-            weekly
-            ..
         ..
         pkg
         ..
         ppp
         ..
-        rc.conf.d
+        run
         ..
-        rc.d
+        runit
         ..
         security
         ..
@@ -94,10 +85,9 @@
         ..
         syslog.d
         ..
-        zfs
-            compatibility.d
-            ..
-        ..
+        zfs             type=link link=../var/run/zfs
+    ..
+    home
     ..
     lib
         casper
@@ -111,20 +101,19 @@
         resolvconf
         ..
     ..
-    media
+    media           type=link link=var/run/media
+    mnt             type=link link=var/run/mnt
+    net             type=link link=var/run/net
+    opt
     ..
-    mnt
-    ..
-    net
+    persist
     ..
     proc            mode=0555
     ..
-    rescue
-    ..
     root            mode=0750
     ..
-    sbin
-    ..
+    sbin            type=link link=usr/sbin
+    service         type=link link=var/run/it
     tmp             mode=01777
     ..
     usr

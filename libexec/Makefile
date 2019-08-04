@@ -16,7 +16,6 @@ SUBDIR=	${_atf} \
 	${_mknetid} \
 	${_phttpget} \
 	${_pppoed} \
-	rc \
 	revnetgroup \
 	${_rlogind} \
 	rpc.rquotad \
