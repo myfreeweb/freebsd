@@ -3569,7 +3569,7 @@ sys_flock(struct thread *td, struct flock_args *uap)
 	error = fget(td, uap->fd, &cap_flock_rights, &fp);
 	if (error != 0)
 		return (error);
-	if (fp->f_type != DTYPE_VNODE || fp->f_ops == &path_fileops) {
+	if ((fp->f_type != DTYPE_VNODE && fp->f_type != DTYPE_FIFO) || fp->f_ops == &path_fileops) {
 		fdrop(fp, td);
 		return (EOPNOTSUPP);
 	}
