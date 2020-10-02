@@ -4767,6 +4767,8 @@ file_type_to_name(short type)
 		return ("eventfd");
 	case DTYPE_LINUXTFD:
 		return ("ltimer");
+	case DTYPE_DMABUF:
+		return ("dmabuf");
 	default:
 		return ("unkn");
 	}
