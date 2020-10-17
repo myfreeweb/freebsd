@@ -18,6 +18,7 @@ _ztest=	ztest
 _zstream = zstream
 .endif
 
+SUBDIR_WITH_INCS=${_zinject} ${_zstream}
 SUBDIR_PARALLEL=
 
 .include <bsd.subdir.mk>
