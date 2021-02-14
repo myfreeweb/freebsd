@@ -19,6 +19,7 @@ SUBDIR=	adduser \
 	dconschat \
 	devctl \
 	devinfo \
+	dhcpcd \
 	diskinfo \
 	dumpcis \
 	etcupdate \
