@@ -66,6 +66,8 @@
 #define	PROC_NO_NEW_PRIVS_CTL	19	/* disable setuid/setgid */
 #define	PROC_NO_NEW_PRIVS_STATUS 20	/* query suid/sgid disabled status */
 
+#define	PROC_KPREOPEN_ADD	69	/* add preopened dir for vfs_lookup */
+
 /* Operations for PROC_SPROTECT (passed in integer arg). */
 #define	PPROT_OP(x)	((x) & 0xf)
 #define	PPROT_SET	1

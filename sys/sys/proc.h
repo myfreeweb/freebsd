@@ -71,6 +71,7 @@
 #include <sys/ucred.h>
 #include <sys/types.h>
 #include <sys/_domainset.h>
+#include <sys/kpreopen.h>
 
 #include <machine/proc.h>		/* Machine-dependent proc substruct. */
 #ifdef _KERNEL
@@ -735,6 +736,8 @@ struct proc {
 	LIST_HEAD(, proc) p_orphans;	/* (e) Pointer to list of orphans. */
 
 	TAILQ_HEAD(, kq_timer_cb_data)	p_kqtim_stop;	/* (c) */
+
+	STAILQ_HEAD(, kpreopen) p_kpreopens;	/* List of preopened fd's for vfs_lookup */
 };
 
 #define	p_session	p_pgrp->pg_session

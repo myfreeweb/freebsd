@@ -43,6 +43,8 @@ __FBSDID("$FreeBSD$");
 #include <sys/syscallsubr.h>
 #include <sys/sysproto.h>
 #include <sys/wait.h>
+#include <sys/malloc.h>
+#include <sys/kernel.h>
 
 #include <vm/vm.h>
 #include <vm/pmap.h>
@@ -590,6 +592,28 @@ stackgap_status(struct thread *td, struct proc *p, int *data)
 	return (0);
 }
 
+MALLOC_DEFINE(M_KPREOPEN, "kpreopen", "kernel preopen facility");
+
+static int
+kpreopen_add(struct proc *p, struct kpreopen *kp)
+{
+	PROC_LOCK_ASSERT(p, MA_OWNED);
+
+	struct kpreopen *k_kp = malloc(sizeof(struct kpreopen), M_KPREOPEN, M_WAITOK | M_ZERO);
+	if (!k_kp)
+		return (ENOMEM);
+
+	strlcpy(k_kp->kp_path, kp->kp_path, PATH_MAX);
+	k_kp->kp_pathlen = strnlen(k_kp->kp_path, PATH_MAX);
+	k_kp->kp_fd = kp->kp_fd;
+	if (STAILQ_EMPTY(&p->p_kpreopens)) {
+		STAILQ_INIT(&p->p_kpreopens);
+	}
+	STAILQ_INSERT_TAIL(&p->p_kpreopens, k_kp, kp_entry);
+
+	return (0);
+}
+
 #ifndef _SYS_SYSPROTO_H_
 struct procctl_args {
 	idtype_t idtype;
@@ -607,6 +631,7 @@ sys_procctl(struct thread *td, struct procctl_args *uap)
 		struct procctl_reaper_status rs;
 		struct procctl_reaper_pids rp;
 		struct procctl_reaper_kill rk;
+		struct kpreopen kp;
 	} x;
 	int error, error1, flags, signum;
 
@@ -664,6 +689,12 @@ sys_procctl(struct thread *td, struct procctl_args *uap)
 		break;
 	case PROC_PDEATHSIG_STATUS:
 		data = &signum;
+		break;
+	case PROC_KPREOPEN_ADD:
+		error = copyin(uap->data, &x.kp, sizeof(x.kp));
+		if (error != 0)
+			return (error);
+		data = &x.kp;
 		break;
 	default:
 		return (EINVAL);
@@ -738,6 +769,8 @@ kern_procctl_single(struct thread *td, struct proc *p, int com, void *data)
 		return (no_new_privs_ctl(td, p, *(int *)data));
 	case PROC_NO_NEW_PRIVS_STATUS:
 		return (no_new_privs_status(td, p, data));
+	case PROC_KPREOPEN_ADD:
+		return (kpreopen_add(p, data));
 	default:
 		return (EINVAL);
 	}
@@ -770,6 +803,7 @@ kern_procctl(struct thread *td, idtype_t idtype, id_t id, int com, void *data)
 	case PROC_PDEATHSIG_STATUS:
 	case PROC_NO_NEW_PRIVS_CTL:
 	case PROC_NO_NEW_PRIVS_STATUS:
+	case PROC_KPREOPEN_ADD:
 		if (idtype != P_PID)
 			return (EINVAL);
 	}
@@ -820,6 +854,7 @@ kern_procctl(struct thread *td, idtype_t idtype, id_t id, int com, void *data)
 	case PROC_TRACE_STATUS:
 	case PROC_TRAPCAP_STATUS:
 	case PROC_NO_NEW_PRIVS_STATUS:
+	case PROC_KPREOPEN_ADD:
 		tree_locked = false;
 		break;
 	default:
