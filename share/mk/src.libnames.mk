@@ -53,6 +53,7 @@ _INTERNALLIBS=	\
 		pe \
 		pfctl \
 		pmcstat \
+		runit \
 		sl \
 		sm \
 		smdb \
@@ -616,6 +617,9 @@ LIBWPAWPS?=	${LIBWPAWPSDIR}/libwpawps${PIE_SUFFIX}.a
 
 LIBC_NOSSP_PICDIR=	${_LIB_OBJTOP}/lib/libc
 LIBC_NOSSP_PIC?=	${LIBC_NOSSP_PICDIR}/libc_nossp_pic.a
+
+LIBRUNITDIR=	${_LIB_OBJTOP}/lib/librunit
+LIBRUNIT?=	${LIBRUNITDIR}/librunit${PIE_SUFFIX}.a
 
 # Define a directory for each library.  This is useful for adding -L in when
 # not using a --sysroot or for meta mode bootstrapping when there is no
