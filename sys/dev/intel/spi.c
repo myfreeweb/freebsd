@@ -305,7 +305,7 @@ intelspi_transfer(device_t dev, device_t child, struct spi_command *cmd)
 {
 	struct intelspi_softc *sc;
 	int err;
-	uint32_t sscr0, sscr1, mode, clock;
+	uint32_t sscr0, sscr1, mode, clock, cs_delay;
 	bool restart = false;
 
 	sc = device_get_softc(dev);
@@ -376,7 +376,9 @@ intelspi_transfer(device_t dev, device_t child, struct spi_command *cmd)
 	sc->sc_len = cmd->tx_cmd_sz + cmd->tx_data_sz;
 
 	/* Enable CS */
+	spibus_get_cs_delay(child, &cs_delay);
 	intelspi_set_cs(sc, CS_LOW);
+	DELAY(cs_delay);
 	/* Transfer as much as possible to FIFOs */
 	if (!intelspi_transact(sc)) {
 		/* If FIFO is not large enough - enable interrupts */
@@ -390,6 +392,7 @@ intelspi_transfer(device_t dev, device_t child, struct spi_command *cmd)
 
 	/* de-asser CS */
 	intelspi_set_cs(sc, CS_HIGH);
+	DELAY(cs_delay);
 
 	/* Clear transaction details */
 	sc->sc_cmd = NULL;
