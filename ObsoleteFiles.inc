@@ -3554,7 +3554,6 @@ OLD_FILES+=usr/share/terminfo/z/ztx
 OLD_FILES+=usr/share/terminfo/z/ztx-1-a
 OLD_FILES+=usr/share/terminfo/z/ztx11
 OLD_DIRS+=usr/share/terminfo/z/
-OLD_DIRS+=usr/share/terminfo/
 
 # 20210316: remove obsolete NFS headers
 OLD_FILES+=usr/include/nfs/nfs_common.h
