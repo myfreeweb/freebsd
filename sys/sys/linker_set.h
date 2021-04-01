@@ -95,7 +95,12 @@
 /*
  * Initialize before referring to a given linker set.
  */
-#define SET_DECLARE(set, ptype)					\
+#define SET_DECLARE(set, ptype)				\
+	extern ptype *__CONCAT(__start_set_,set);	\
+	extern ptype *__CONCAT(__stop_set_,set)
+
+/* Like SET_DECLARE() but also marks the symbols weak to support empty sets. */
+#define SET_DECLARE_WEAK(set, ptype)				\
 	extern ptype __weak_symbol *__CONCAT(__start_set_,set);	\
 	extern ptype __weak_symbol *__CONCAT(__stop_set_,set)
 

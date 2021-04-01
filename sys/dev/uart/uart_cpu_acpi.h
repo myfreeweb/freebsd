@@ -62,7 +62,7 @@ SET_DECLARE(uart_acpi_class_and_device_set, struct acpi_uart_compat_data);
  * If your UART driver implements uart_class and custom device layer,
  * then use UART_ACPI_CLASS for its declaration
  */
-SET_DECLARE(uart_acpi_class_set, struct acpi_uart_compat_data);
+SET_DECLARE_WEAK(uart_acpi_class_set, struct acpi_uart_compat_data);
 #define UART_ACPI_CLASS(data)				\
 	DATA_SET(uart_acpi_class_set, data)
 

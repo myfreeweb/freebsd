@@ -64,7 +64,7 @@ __SCCSID("@(#)kvm.c	8.2 (Berkeley) 2/13/94");
 
 #include "kvm_private.h"
 
-SET_DECLARE(kvm_arch, struct kvm_arch);
+SET_DECLARE_WEAK(kvm_arch, struct kvm_arch);
 
 static char _kd_is_null[] = "";
 

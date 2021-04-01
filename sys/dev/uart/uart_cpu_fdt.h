@@ -46,7 +46,7 @@ SET_DECLARE(uart_fdt_class_and_device_set, struct ofw_compat_data );
  * If your UART driver implements uart_class and custom device layer,
  * then use UART_FDT_CLASS for its declaration
  */
-SET_DECLARE(uart_fdt_class_set, struct ofw_compat_data );
+SET_DECLARE_WEAK(uart_fdt_class_set, struct ofw_compat_data );
 #define UART_FDT_CLASS(data)				\
 	DATA_SET(uart_fdt_class_set, data)
 
