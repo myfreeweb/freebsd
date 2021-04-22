@@ -30,36 +30,40 @@
 
 #if defined(__aarch64__) || defined(__amd64__) || defined(__i386__)
 
+#include <linux/sched.h>
 #include <machine/fpu.h>
 
-extern struct fpu_kern_ctx *__lkpi_fpu_ctx;
-extern unsigned int __lkpi_fpu_ctx_level;
+/*
+ * Technically the Linux API isn't supposed to allow nesting sections either,
+ * but currently used versions of GPU drivers rely on nesting working,
+ * so we only enter the section on the outermost level.
+ */
 
 static inline void
-kernel_fpu_begin()
+kernel_fpu_begin(void)
 {
-	if (__lkpi_fpu_ctx_level++ == 0) {
-		fpu_kern_enter(curthread, __lkpi_fpu_ctx, FPU_KERN_NORMAL);
+	if (current->fpu_ctx_level++ == 0) {
+		fpu_kern_enter(curthread, NULL, FPU_KERN_NOCTX);
 	}
 }
 
 static inline void
-kernel_fpu_end()
+kernel_fpu_end(void)
 {
-	if (--__lkpi_fpu_ctx_level == 0) {
-		fpu_kern_leave(curthread, __lkpi_fpu_ctx);
+	if (--current->fpu_ctx_level == 0) {
+		fpu_kern_leave(curthread, NULL);
 	}
 }
 
 #else
 
 static inline void
-kernel_fpu_begin()
+kernel_fpu_begin(void)
 {
 }
 
 static inline void
-kernel_fpu_end()
+kernel_fpu_end(void)
 {
 }
 
