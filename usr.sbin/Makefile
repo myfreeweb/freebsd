@@ -92,6 +92,7 @@ SUBDIR=	adduser \
 	spi \
 	spray \
 	sv \
+	svdef \
 	syslogd \
 	sysrc \
 	tcpdrop \

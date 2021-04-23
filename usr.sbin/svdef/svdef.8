@@ -1,0 +1,37 @@
+.Dd March 21, 2021
+.Dt SVDEF 8
+.Os
+.Sh NAME
+.Nm svdef
+.Nd "generate a runit service directory"
+.Sh SYNOPSIS
+.Nm
+.Ar path
+.Sh DESCRIPTION
+The
+.Nm
+program generates a
+.Xr runsv 8
+service directory based on a single
+.Xr libucl 3
+syntax definition file, and restarts
+the service if the definition has changed.
+.Pp
+The generated scripts use
+.Xr chpst 8
+for applying requested parameters, and for logging,
+.Xr logger 1
+is used.
+.Sh EXIT STATUS
+.Ex -std
+.Sh SEE ALSO
+.Xr runsv 8 ,
+.Xr chpst 8 ,
+.Xr logger 1 ,
+.Xr libucl 3
+.Sh HISTORY
+The
+.Nm
+utility first appeared in DankBSD.
+.Sh AUTHORS
+.An Greg V Aq Mt greg@unrelenting.technology .
