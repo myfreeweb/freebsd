@@ -1,0 +1,13 @@
+#!/bin/sh
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+
+if [ -e /var/run/runit-reboot ]; then
+	chmod 100 /var/run/runit-reboot
+fi
+
+reset -Q
+echo "=> Waiting for services to stop"
+sv force-stop /var/run/it/*
+sv exit /var/run/it/*
+
+utx shutdown

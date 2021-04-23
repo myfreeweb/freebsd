@@ -1,0 +1,2 @@
+#!/usr/sbin/svdef
+run = "/usr/sbin/syslogd -F -ss >/dev/null"

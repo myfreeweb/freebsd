@@ -1,0 +1,6 @@
+#!/bin/sh
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+
+utx boot
+
+exec env - PATH=$PATH SVDIR=/var/run/it runsvdir -P /var/run/it 'log: ......................................................................................'

@@ -1,0 +1,2 @@
+#!/usr/sbin/svdef
+run = "/usr/sbin/dhcpcd -B >/dev/null"

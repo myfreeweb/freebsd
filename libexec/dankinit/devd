@@ -1,0 +1,2 @@
+#!/usr/sbin/svdef
+run = "/sbin/devd -d -q -l 69 >/dev/null"

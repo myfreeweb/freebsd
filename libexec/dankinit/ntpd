@@ -1,0 +1,2 @@
+#!/usr/sbin/svdef
+run = "/usr/sbin/ntpd -d -s"

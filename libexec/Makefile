@@ -7,6 +7,7 @@ SUBDIR=	${_atf} \
 	${_atrun} \
 	${_blacklistd-helper} \
 	${_comsat} \
+	dankinit \
 	${_dma} \
 	flua \
 	getty \

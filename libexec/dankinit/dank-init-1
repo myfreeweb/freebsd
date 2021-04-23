@@ -1,0 +1,115 @@
+#!/bin/sh
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+
+emergency_shell() {
+	kldload -n hidbus hkbd uhci xhci ohci ehci usbhid iic iicbus ig4 iichid > /dev/null 2>&1 || true
+	echo
+	echo "=> Cannot continue due to errors above, starting emergency shell."
+	echo "   When ready, type 'exit' to continue booting."
+	#/usr/libexec/getty 3wire console
+	/bin/sh -p || /rescue/sh -p
+}
+
+echo "=> Welcome to DankBSD!"
+
+if [ -n "$(kenv boot_single 2>/dev/null)" ]; then
+	if [ "x$(kenv boot_single)" = "xYES" ]; then
+		echo "=> Single user mode requested, starting shell!"
+		emergency_shell
+	fi
+fi
+
+echo "=> Mounting ZFS filesystems"
+if [ -r /boot/zfs/zpool.cache ]; then
+	zpool import -c /boot/zfs/zpool.cache -a -N
+fi
+zfs mount -va || emergency_shell
+
+(
+	[ ! -d /persist ] && echo "=> No /persist dataset found - running in live mode" && return 0
+
+	dumpdev=$(kenv -q dumpdev)
+	[ -z "${dumpdev}" ] && return 0
+
+	savecore -C "${dumpdev}" && (
+		echo "=> Saving core dump"
+		savecore -m 10 /persist/crash "${dumpdev}"
+	)
+
+	if [ -r /persist/dumppubkey ]; then
+		echo "=> Enabling core dump device ${dumpdev} with public key"
+		dumpon -k /persist/dumppubkey "${dumpdev}"
+	else
+		echo "=> Enabling core dump device ${dumpdev}"
+		dumpon "${dumpdev}"
+	fi
+	ln -sf "${dumpdev}" /dev/dumpdev
+)
+
+_dev_matches=$(devmatch)
+[ ! -z "${_dev_matches}"] && \
+	echo "=> Autoloading kernel modules: ${_dev_matches}" && \
+	kldload -n ${_dev_matches} &
+
+echo "=> Mounting temporary, virtual, and overlay filesystems"
+_fstab_log="tmpfs /var/log tmpfs rw 0 0"
+[ -d /persist/log ] && _fstab_log="/persist/log /var/log unionfs rw,noatime 0 0"
+_fstab_overlay_etc=
+[ -d /persist/etc ] && _fstab_overlay_etc="/persist/etc /etc unionfs rw,noatime 0 0"
+cat <<EOF | env PATH_FSTAB=/dev/stdin mount -a
+proc /proc procfs rw 0 0
+none /compat/linux/proc linprocfs rw 0 0
+none /compat/linux/sys linsysfs rw 0 0
+none /dev/fd fdescfs rw,linrdlnk 0 0
+${_fstab_log}
+tmpfs /var/run tmpfs rw 0 0
+tmpfs /tmp tmpfs rw 0 0
+${_fstab_overlay_etc}
+EOF
+
+mkdir /var/run/it /var/run/media /var/run/mnt /var/run/net /var/run/zfs
+install -m100 /dev/null /var/run/runit-stopit
+[ ! -f /var/log/utx.lastlogin ] && install -m644 /dev/null /var/log/utx.lastlogin
+[ ! -f /var/log/utx.log ] && install -m644 /dev/null /var/log/utx.log
+zfs share -a || echo "=> Could not share ZFS filesystems"
+[ ! -r /etc/zfs/exports ] && touch /etc/zfs/exports
+
+version=$(freebsd-version -u)
+version_id=${version%%[^0-9.]*}
+cat <<EOF >/var/run/os-release && chmod 444 /var/run/os-release
+NAME=FreeBSD
+VERSION=${version}
+VERSION_ID=${version_id}
+ID=freebsd
+ANSI_COLOR="0;31"
+PRETTY_NAME="FreeBSD ${version}"
+CPE_NAME=cpe:/o:freebsd:freebsd:${version_id}
+HOME_URL=https://FreeBSD.org/
+BUG_REPORT_URL=https://bugs.FreeBSD.org/
+EOF
+
+# TODO: hostuuid, timezone, mixer, ucode
+
+if [ -r "/etc/hostname" ]; then
+	_hostname=$(cat /etc/hostname)
+elif [ -n "$(kenv dankbsd.hostname 2>/dev/null)" ]; then
+	_hostname=$(kenv dankbsd.hostname)
+else
+	_hostname="dankbsd-live"
+fi
+
+echo "=> Setting hostname to ${_hostname}"
+hostname "${_hostname}"
+
+echo "=> Configuring library paths"
+ldconfigs
+
+echo "=> Launching services"
+# TODO: replace this with a script that removes removed ones etc.
+find /etc/run \! -name "*.tpl" -type f -exec "{}" \; || emergency_shell
+(cd /dev && for tty in $(echo tty*); do env TTY=$tty /etc/run/getty.tpl; done)
+
+(
+	umask 022
+	dmesg > /var/run/dmesg.boot
+)
