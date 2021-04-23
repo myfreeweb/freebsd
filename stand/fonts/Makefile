@@ -5,6 +5,8 @@
 .PATH: ${SRCTOP}/contrib/terminus
 
 FONTS=	\
+	cursed.fnt.gz \
+	cursed-2x.fnt.gz \
 	6x12.fnt.gz \
 	8x14.fnt.gz \
 	8x14v.fnt.gz \
@@ -23,6 +25,10 @@ FILESDIR=	/boot/fonts
 
 CLEANFILES+=	${FONTS} ${FONTS:T:S/${COMPRESS_EXT}//g}
 
+cursed.fnt.gz: cursed.fnt
+	${COMPRESS_CMD} ${.ALLSRC} > ${.TARGET}
+cursed-2x.fnt.gz: cursed-2x.fnt
+	${COMPRESS_CMD} ${.ALLSRC} > ${.TARGET}
 6x12.fnt.gz: 6x12.fnt
 	${COMPRESS_CMD} ${.ALLSRC} > ${.TARGET}
 8x14.fnt.gz: 8x14.fnt
@@ -47,6 +53,12 @@ CLEANFILES+=	${FONTS} ${FONTS:T:S/${COMPRESS_EXT}//g}
 	${COMPRESS_CMD} ${.ALLSRC} > ${.TARGET}
 16x32.fnt.gz: 16x32.fnt
 	${COMPRESS_CMD} ${.ALLSRC} > ${.TARGET}
+
+cursed.fnt: ${SRCTOP}/share/vt/fonts/cursed.bdf
+	vtfontcvt -o ${.TARGET} ${.ALLSRC}
+
+cursed-2x.fnt: ${SRCTOP}/share/vt/fonts/cursed-2x.bdf
+	vtfontcvt -o ${.TARGET} ${.ALLSRC}
 
 6x12.fnt: ter-u12n.bdf ter-u12b.bdf
 	vtfontcvt -o ${.TARGET} ${.ALLSRC}

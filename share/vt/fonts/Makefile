@@ -1,6 +1,8 @@
 # $FreeBSD$
 
 FONTS=	comic-8x14.fnt \
+	cursed.fnt \
+	cursed-2x.fnt \
 	gallant.fnt \
 	terminus-b32.fnt \
 	tom-thumb.fnt \

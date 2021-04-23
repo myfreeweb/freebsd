@@ -34,6 +34,9 @@ MENU:fr:Choisissez votre fonte écran
 FONT:en:8x16v.fnt
 #
 
+cursed.fnt:en:cursed_font by kiedtl, 9x18
+cursed-2x.fnt:en:cursed_font by kiedtl, 18x36
+
 6x12.fnt:en:Terminus BSD Console, size 12
 6x12.fnt:da:Terminus BSD-konsol, størrelse 12
 6x12.fnt:de:Terminus BSD Console, Größe 12
