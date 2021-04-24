@@ -224,6 +224,8 @@ void	terminal_input_special(struct terminal *tm, unsigned int k);
 
 void	termcn_cnregister(struct terminal *tm);
 
+void terminal_restyle_kernel_message(void);
+
 /* Kernel console helper interface. */
 extern const struct consdev_ops termcn_cnops;
 

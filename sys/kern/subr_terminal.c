@@ -130,6 +130,13 @@ static teken_attr_t kernel_message = {
 	.ta_format	= TCHAR_FORMAT(TERMINAL_KERN_ATTR)
 };
 
+void
+terminal_restyle_kernel_message(void)
+{
+	kernel_message.ta_fgcolor = TCHAR_FGCOLOR(FG_WHITE);
+	kernel_message.ta_bgcolor = TCHAR_BGCOLOR(BG_CYAN);
+}
+
 static teken_attr_t default_message = {
 	.ta_fgcolor	= TCHAR_FGCOLOR(TERMINAL_NORM_ATTR),
 	.ta_bgcolor	= TCHAR_BGCOLOR(TERMINAL_NORM_ATTR),

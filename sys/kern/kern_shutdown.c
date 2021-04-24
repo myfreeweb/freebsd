@@ -79,6 +79,7 @@ __FBSDID("$FreeBSD$");
 #include <sys/taskqueue.h>
 #include <sys/vnode.h>
 #include <sys/watchdog.h>
+#include <sys/terminal.h>
 
 #include <crypto/chacha20/chacha.h>
 #include <crypto/rijndael/rijndael-api-fst.h>
@@ -889,6 +890,8 @@ vpanic(const char *fmt, va_list ap)
 		(void)vsnprintf(buf, sizeof(buf), fmt, ap);
 		panicstr = buf;
 		cngrab();
+		terminal_restyle_kernel_message();
+		printf("\033[2J\033[H\n\n\n\n");
 		printf("panic: %s\n", buf);
 	} else {
 		printf("panic: ");
