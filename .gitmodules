@@ -16,3 +16,6 @@
 [submodule "contrib/runit"]
 	path = contrib/runit
 	url = https://github.com/madscientist42/runit
+[submodule "contrib/zlib-ng"]
+	path = contrib/zlib-ng
+	url = https://github.com/zlib-ng/zlib-ng
