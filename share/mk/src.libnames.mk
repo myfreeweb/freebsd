@@ -28,8 +28,7 @@ _PRIVATELIBS=	\
 		ldns \
 		ssh \
 		ucl \
-		unbound \
-		zstd
+		unbound
 
 _INTERNALLIBS=	\
 		amu \
@@ -216,6 +215,7 @@ _LIBRARIES=	\
 		zfs \
 		zfsbootenv \
 		zpool \
+		zstd \
 		zutil
 
 .if ${MK_BLACKLIST} != "no"

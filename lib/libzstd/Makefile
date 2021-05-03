@@ -34,12 +34,11 @@ SRCS=	entropy_common.c \
 	hist.c \
 	fastcover.c
 WARNS?=	2
-INCS=	zstd.h
+INCS=	zbuff.h zdict.h zstd.h zstd_errors.h
 CFLAGS+=	-I${ZSTDDIR}/lib -I${ZSTDDIR}/lib/common -DXXH_NAMESPACE=ZSTD_ \
 		-DZSTD_MULTITHREAD=1 -fvisibility=hidden
 LIBADD=	pthread
 
-PRIVATELIB=	yes
 PACKAGE=	runtime
 
 ZSTDDIR=	${SRCTOP}/sys/contrib/zstd
@@ -64,5 +63,15 @@ CFLAGS.zstd_decompress_block.c+=	-fno-tree-vectorize
 .PATH:	${ZSTDDIR}/lib/freebsd
 SRCS+=	zstd_kfreebsd.c
 .endif
+
+libzstd.pc: libzstd.pc.in
+	sed -e 's,@PREFIX@,/usr,g ; \
+		s,@EXEC_PREFIX@,$${prefix},g ; \
+		s,@LIBDIR@,$${prefix}/lib,g ; \
+		s,@INCLUDEDIR@,$${prefix}/include,g ; \
+		s,@VERSION@,1.4.8,g ;' \
+		${.ALLSRC} > ${.TARGET}
+
+PCFILES=	libzstd.pc
 
 .include <bsd.lib.mk>

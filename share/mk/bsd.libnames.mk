@@ -174,6 +174,7 @@ LIBZFS?=	${LIBDESTDIR}${LIBDIR_BASE}/libzfs.a
 LIBZFS_CORE?=	${LIBDESTDIR}${LIBDIR_BASE}/libzfs_core.a
 LIBZFSBOOTENV?=	${LIBDESTDIR}${LIBDIR_BASE}/libzfsbootenv.a
 LIBZPOOL?=	${LIBDESTDIR}${LIBDIR_BASE}/libzpool.a
+LIBZSTD?=	${LIBDESTDIR}${LIBDIR_BASE}/libzstd.a
 LIBZUTIL?=	${LIBDESTDIR}${LIBDIR_BASE}/libzutil.a
 
 # enforce the 2 -lpthread and -lc to always be the last in that exact order
