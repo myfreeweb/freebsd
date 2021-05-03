@@ -26,7 +26,6 @@ _PRIVATELIBS=	\
 		heimipcc \
 		heimipcs \
 		ldns \
-		sqlite3 \
 		ssh \
 		ucl \
 		unbound \
@@ -190,6 +189,7 @@ _LIBRARIES=	\
 		spl \
 		ssl \
 		ssp_nonshared \
+		sqlite3 \
 		stats \
 		stdthreads \
 		supcplusplus \
@@ -270,7 +270,7 @@ _DP_archive+=	crypto
 .else
 _DP_archive+=	md
 .endif
-_DP_sqlite3=	pthread
+_DP_sqlite3=	pthread z m
 _DP_ssl=	crypto
 _DP_tls=	ssl crypto
 _DP_ssh=	crypto crypt z
