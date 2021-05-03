@@ -86,7 +86,6 @@ __FBSDID("$FreeBSD$");
 #include <syslog.h>
 #include <time.h>
 #include <unistd.h>
-#define	Z_SOLO
 #include <zlib.h>
 #include <zstd.h>
 
@@ -105,7 +104,7 @@ __FBSDID("$FreeBSD$");
 
 static cap_channel_t *capsyslog;
 static fileargs_t *capfa;
-static bool checkfor, compress, uncompress, clear, force, keep;	/* flags */
+static bool checkfor, do_compress, do_uncompress, clear, force, keep;	/* flags */
 static int verbose;
 static int nfound, nsaved, nerr;			/* statistics */
 static int maxdumps;
@@ -803,15 +802,15 @@ DoFile(const char *savedir, int savedirfd, const char *device)
 		}
 		switch (kdhl.compression) {
 		case KERNELDUMP_COMP_NONE:
-			uncompress = false;
+			do_uncompress = false;
 			break;
 		case KERNELDUMP_COMP_GZIP:
 		case KERNELDUMP_COMP_ZSTD:
-			if (compress && verbose)
+			if (do_compress && verbose)
 				printf("dump is already compressed\n");
-			if (uncompress && verbose)
+			if (do_uncompress && verbose)
 				printf("dump to be uncompressed\n");
-			compress = false;
+			do_compress = false;
 			iscompressed = true;
 			break;
 		default:
@@ -930,11 +929,11 @@ DoFile(const char *savedir, int savedirfd, const char *device)
 	}
 
 	isencrypted = (dumpkeysize > 0);
-	if (compress)
+	if (do_compress)
 		snprintf(corename, sizeof(corename), "%s.%d.gz",
 		    istextdump ? "textdump.tar" :
 		    (isencrypted ? "vmcore_encrypted" : "vmcore"), bounds);
-	else if (iscompressed && !isencrypted && !uncompress)
+	else if (iscompressed && !isencrypted && !do_uncompress)
 		snprintf(corename, sizeof(corename), "vmcore.%d.%s", bounds,
 		    (kdhl.compression == KERNELDUMP_COMP_GZIP) ? "gz" : "zst");
 	else
@@ -950,7 +949,7 @@ DoFile(const char *savedir, int savedirfd, const char *device)
 		goto closefd;
 	}
 
-	if (compress)
+	if (do_compress)
 		core = zdopen(fdcore, "w");
 	else
 		core = fdopen(fdcore, "w");
@@ -1006,7 +1005,7 @@ DoFile(const char *savedir, int savedirfd, const char *device)
 	}
 
 	logmsg(LOG_NOTICE, "writing %s%score to %s/%s",
-	    isencrypted ? "encrypted " : "", compress ? "compressed " : "",
+	    isencrypted ? "encrypted " : "", do_compress ? "compressed " : "",
 	    savedir, corename);
 
 	if (istextdump) {
@@ -1015,8 +1014,8 @@ DoFile(const char *savedir, int savedirfd, const char *device)
 			goto closeall;
 	} else {
 		if (DoRegularFile(fddev, dumplength, sectorsize,
-		    !(compress || iscompressed || isencrypted),
-		    uncompress ? kdhl.compression : KERNELDUMP_COMP_NONE,
+		    !(do_compress || iscompressed || isencrypted),
+		    do_uncompress ? kdhl.compression : KERNELDUMP_COMP_NONE,
 		    buf, device, corename, core) < 0) {
 			goto closeall;
 		}
@@ -1042,7 +1041,7 @@ DoFile(const char *savedir, int savedirfd, const char *device)
 			    "key.last");
 		}
 	}
-	if ((iscompressed && !uncompress) || compress) {
+	if ((iscompressed && !do_uncompress) || do_compress) {
 		snprintf(linkname, sizeof(linkname), "%s.last.%s",
 		    istextdump ? "textdump.tar" :
 		    (isencrypted ? "vmcore_encrypted" : "vmcore"),
@@ -1226,7 +1225,7 @@ main(int argc, char **argv)
 	char **devs;
 	int i, ch, error, savedirfd;
 
-	checkfor = compress = clear = force = keep = false;
+	checkfor = do_compress = clear = force = keep = false;
 	verbose = 0;
 	nfound = nsaved = nerr = 0;
 	savedir = ".";
@@ -1260,13 +1259,13 @@ main(int argc, char **argv)
 			}
 			break;
 		case 'u':
-			uncompress = true;
+			do_uncompress = true;
 			break;
 		case 'v':
 			verbose++;
 			break;
 		case 'z':
-			compress = true;
+			do_compress = true;
 			break;
 		case '?':
 		default:
@@ -1274,11 +1273,11 @@ main(int argc, char **argv)
 		}
 	if (checkfor && (clear || force || keep))
 		usage();
-	if (clear && (compress || keep))
+	if (clear && (do_compress || keep))
 		usage();
 	if (maxdumps > 0 && (checkfor || clear))
 		usage();
-	if (compress && uncompress)
+	if (do_compress && do_uncompress)
 		usage();
 	argc -= optind;
 	argv += optind;
