@@ -19,3 +19,6 @@
 [submodule "contrib/zlib-ng"]
 	path = contrib/zlib-ng
 	url = https://github.com/zlib-ng/zlib-ng
+[submodule "contrib/libffi"]
+	path = contrib/libffi
+	url = https://github.com/libffi/libffi

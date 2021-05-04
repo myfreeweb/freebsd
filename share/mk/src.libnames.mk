@@ -127,6 +127,7 @@ _LIBRARIES=	\
 		elf \
 		execinfo \
 		fetch \
+		ffi \
 		figpar \
 		geom \
 		gpio \

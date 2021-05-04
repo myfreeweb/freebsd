@@ -55,6 +55,7 @@ SUBDIR=	${SUBDIR_BOOTSTRAP} \
 	libevent1 \
 	libexecinfo \
 	libexpat \
+	libffi \
 	libfetch \
 	libfigpar \
 	libgcc_eh \
