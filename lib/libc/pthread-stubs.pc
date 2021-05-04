@@ -1,0 +1,5 @@
+Name: pthread stubs
+Description: Meta package for pthread symbols - defaults to heavyweight ones if the C runtime does not provide lightweight ones.
+Version: 0.4
+Cflags: -pthread
+Libs: -pthread

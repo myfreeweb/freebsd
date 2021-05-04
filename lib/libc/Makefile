@@ -189,6 +189,8 @@ libkern.${LIBC_ARCH}:: ${KMSRCS}
 HAS_TESTS=
 SUBDIR.${MK_TESTS}+= tests
 
+PCFILES=  pthread-stubs.pc
+
 .include <bsd.lib.mk>
 
 .if (${LIBC_ARCH} == amd64 || ${LIBC_ARCH} == i386) && \
