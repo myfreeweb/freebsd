@@ -81,6 +81,7 @@ SUBDIR=	${SUBDIR_BOOTSTRAP} \
 	libpam \
 	libpathconv \
 	libpcap \
+	libpciaccess \
 	libpjdlog \
 	libproc \
 	libprocstat \

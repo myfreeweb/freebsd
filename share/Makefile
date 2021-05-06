@@ -20,6 +20,7 @@ SUBDIR=	${_colldef} \
 	${_monetdef} \
 	${_msgdef} \
 	${_numericdef} \
+	pciids \
 	${_sendmail} \
 	skel \
 	${_snmp} \

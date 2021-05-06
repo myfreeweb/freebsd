@@ -25,3 +25,9 @@
 [submodule "contrib/lz4"]
 	path = contrib/lz4
 	url = https://github.com/lz4/lz4
+[submodule "contrib/libpciaccess"]
+	path = contrib/libpciaccess
+	url = https://gitlab.freedesktop.org/xorg/lib/libpciaccess.git
+[submodule "contrib/pciids"]
+	path = contrib/pciids
+	url = https://github.com/pciutils/pciids

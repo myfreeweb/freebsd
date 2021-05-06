@@ -169,6 +169,7 @@ _LIBRARIES=	\
 		panel \
 		panelw \
 		pcap \
+		pciaccess \
 		pcsclite \
 		pjdlog \
 		pmc \
@@ -293,6 +294,7 @@ _DP_cap_syslog=	nv
 .if ${MK_OFED} != "no"
 _DP_pcap=	ibverbs mlx5
 .endif
+_DP_pciaccess=	z
 _DP_pjdlog=	util
 _DP_opie=	md
 _DP_usb=	pthread
