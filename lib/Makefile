@@ -67,6 +67,7 @@ SUBDIR=	${SUBDIR_BOOTSTRAP} \
 	libkiconv \
 	libkvm \
 	liblua \
+	liblz4 \
 	liblzma \
 	libmemstat \
 	libmd \
@@ -113,7 +114,7 @@ SUBDIR=	${SUBDIR_BOOTSTRAP} \
 
 SUBDIR_DEPEND_geom=	libufs
 SUBDIR_DEPEND_googletest= libregex
-SUBDIR_DEPEND_libarchive= libz libbz2 libexpat liblzma libmd libzstd
+SUBDIR_DEPEND_libarchive= libz libbz2 libexpat liblzma libmd libzstd liblz4
 SUBDIR_DEPEND_libauditdm= libbsm
 SUBDIR_DEPEND_libbsnmp= ${_libnetgraph}
 SUBDIR_DEPEND_libc++:= libcxxrt

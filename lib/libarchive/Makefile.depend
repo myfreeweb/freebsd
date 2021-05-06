@@ -9,6 +9,7 @@ DIRDEPS = \
 	lib/libc \
 	lib/libcompiler_rt \
 	lib/libexpat \
+	lib/liblz4 \
 	lib/liblzma \
 	lib/libz \
 	lib/libzstd \

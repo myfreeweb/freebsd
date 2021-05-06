@@ -22,3 +22,6 @@
 [submodule "contrib/libffi"]
 	path = contrib/libffi
 	url = https://github.com/libffi/libffi
+[submodule "contrib/lz4"]
+	path = contrib/lz4
+	url = https://github.com/lz4/lz4

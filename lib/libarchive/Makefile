@@ -12,6 +12,7 @@ SHLIB_MAJOR= 7
 
 CFLAGS+=	-I${.OBJDIR}
 CFLAGS+=	-I${SRCTOP}/sys/contrib/zstd/lib
+CFLAGS+=	-I${SRCTOP}/sys/contrib/lz4/lib
 .include "Makefile.inc"
 
 .if ${MACHINE_ARCH:Marm*} != "" || ${MACHINE_ARCH:Mmips*} != "" || \
@@ -149,6 +150,8 @@ SRCS=	archive_acl.c					\
 	archive_write_set_passphrase.c			\
 	archive_write_set_options.c			\
 	filter_fork_posix.c
+
+SRCS+=xxhash.c
 
 # Man pages to be installed.
 MAN=	archive_entry.3					\
