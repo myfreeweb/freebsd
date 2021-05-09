@@ -41,15 +41,15 @@
 .Nm
 .Op Fl Ealnru
 .Ar command
-.Op Fl I Ar extension
-.Op Fl i Ar extension
+.Op Fl I Op Ar extension
+.Op Fl i Op Ar extension
 .Op Ar
 .Nm
 .Op Fl Ealnru
 .Op Fl e Ar command
 .Op Fl f Ar command_file
-.Op Fl I Ar extension
-.Op Fl i Ar extension
+.Op Fl I Op Ar extension
+.Op Fl i Op Ar extension
 .Op Ar
 .Sh DESCRIPTION
 The
@@ -102,7 +102,7 @@ The commands are read from the standard input if
 .Ar command_file
 is
 .Dq Li - .
-.It Fl I Ar extension
+.It Fl I Op Ar extension
 Edit files in-place, saving backups with the specified
 .Ar extension .
 If a zero-length
@@ -128,7 +128,7 @@ That can lead to unexpected results in many cases of in-place editing,
 where using
 .Fl i
 is desired.
-.It Fl i Ar extension
+.It Fl i Op Ar extension
 Edit files in-place similarly to
 .Fl I ,
 but treat each file independently from other files.

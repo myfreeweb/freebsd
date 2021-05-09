@@ -65,6 +65,9 @@ static const char sccsid[] = "@(#)main.c	8.2 (Berkeley) 1/3/94";
 #include <string.h>
 #include <unistd.h>
 
+#include <ctype.h>
+#include <stdbool.h>
+
 #include "defs.h"
 #include "extern.h"
 
@@ -123,6 +126,16 @@ static void add_compunit(enum e_cut, char *);
 static void add_file(char *);
 static void usage(void);
 
+static bool
+is_unlike_extension(char *s)
+{
+	size_t len = strlen(s);
+	for (size_t i = 0; i < len; i++)
+		if (!isalnum(s[i]) && s[i] != '.')
+			return true;
+	return false;
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -135,14 +148,14 @@ main(int argc, char *argv[])
 	fflagstdin = 0;
 	inplace = NULL;
 
-	while ((c = getopt(argc, argv, "EI:ae:f:i:lnru")) != -1)
+	while ((c = getopt(argc, argv, "EI::ae:f:i::lnru")) != -1)
 		switch (c) {
 		case 'r':		/* Gnu sed compat */
 		case 'E':
 			rflags = REG_EXTENDED;
 			break;
 		case 'I':
-			inplace = optarg;
+			inplace = optarg ? optarg : ((optind >= argc || is_unlike_extension(argv[optind])) ? "" : argv[optind++]);
 			ispan = 1;	/* span across input files */
 			break;
 		case 'a':
@@ -163,7 +176,7 @@ main(int argc, char *argv[])
 			add_compunit(CU_FILE, optarg);
 			break;
 		case 'i':
-			inplace = optarg;
+			inplace = optarg ? optarg : ((optind >= argc || is_unlike_extension(argv[optind])) ? "" : argv[optind++]);
 			ispan = 0;	/* don't span across input files */
 			break;
 		case 'l':
