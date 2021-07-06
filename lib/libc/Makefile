@@ -54,6 +54,10 @@ CANCELPOINTS_CFLAGS=-fexceptions
 CFLAGS+=${CANCELPOINTS_CFLAGS}
 .endif
 
+.if ${LIBC_ARCH} == "amd64" || ${LIBC_ARCH} == "aarch64"
+CFLAGS+= -ftls-model=initial-exec
+.endif
+
 #
 # Link with static libcompiler_rt.a.
 #
