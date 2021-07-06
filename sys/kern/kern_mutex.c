@@ -587,7 +587,7 @@ __mtx_lock_sleep(volatile uintptr_t *c, uintptr_t v)
 		 * owner stops running or the state of the lock changes.
 		 */
 		owner = lv_mtx_owner(v);
-		if (TD_IS_RUNNING(owner)) {
+		if (__predict_true(m != &Giant) && TD_IS_RUNNING(owner)) {
 			if (LOCK_LOG_TEST(&m->lock_object, 0))
 				CTR3(KTR_LOCK,
 				    "%s: spinning on %p held by %p",
@@ -630,7 +630,7 @@ retry_turnstile:
 		 * again.
 		 */
 		owner = lv_mtx_owner(v);
-		if (TD_IS_RUNNING(owner)) {
+		if (__predict_true(m != &Giant) && TD_IS_RUNNING(owner)) {
 			turnstile_cancel(ts);
 			continue;
 		}
